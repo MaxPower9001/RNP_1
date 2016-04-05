@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import backend.NewsQueue;
@@ -15,24 +10,28 @@ import java.util.NoSuchElementException;
 import static util.NewsCategory.*;
 
 /**
- *
  * @author Rene
  */
-public class Main extends javax.swing.JPanel implements Runnable {
+public class Main extends javax.swing.JPanel{
 
-    private boolean sleepyThreads = false;
-
-    private Thread t;
-    private String threadName;
 
     private static JFrame parent;
+    private boolean sleepyThreads = false;
+    private Thread t;
+    private String threadName;
     private ThreadHandler threadHandler;
     private NewsQueue newsQueue;
-
-    public static void main (String[] Args){
-        java.awt.EventQueue.invokeLater(() -> new Main().setVisible(true));
-    }
-
+    private javax.swing.JButton bCreateThreads;
+    private javax.swing.JButton bCreateNews;
+    private javax.swing.JButton bThreadSleep;
+    private javax.swing.JComboBox<String> cSelectCategory;
+    private javax.swing.JLabel lNewsticker;
+    private javax.swing.JLabel lCounter;
+    private javax.swing.JLabel lThreadCounter;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSlider sThreadCounter;
+    private javax.swing.JTextField tNewsInput;
     /**
      * Creates new form NewJPanel
      */
@@ -40,45 +39,18 @@ public class Main extends javax.swing.JPanel implements Runnable {
         initParent();
         newsQueue = new NewsQueue();
         initComponents();
-
-        threadName = "MainThread";
-
-        start();
     }
 
-    public void start ()
-    {
-        System.out.println("Starting " +  threadName );
-        if (t == null)
-        {
-            t = new Thread (this, threadName);
-            t.start();
-        }
+    public static void main(String[] Args) {
+        java.awt.EventQueue.invokeLater(() -> new Main().setVisible(true));
     }
+
 
     private void initParent() {
         parent = new JFrame();
-        parent.setSize(1024,768);
+        parent.setSize(1024, 768);
         parent.setVisible(true);
         parent.add(this);
-    }
-
-    @Override
-    public void run() {
-        while(true){
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                lNewsticker.setText(newsQueue.getNews());
-            } catch(NoSuchElementException e) {
-                // Wir wissen was wir tun.
-            }
-            lCounter.setText("News-Queue Füllstand: " + newsQueue.newsCounter());
-        }
     }
 
     /**
@@ -122,7 +94,7 @@ public class Main extends javax.swing.JPanel implements Runnable {
             }
         });
 
-        cSelectCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { CORR.toString(), WARN.toString(), INFO.toString()}));
+        cSelectCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{CORR.toString(), WARN.toString(), INFO.toString()}));
 
         bCreateNews.setText("News abschicken!");
         bCreateNews.addActionListener(new java.awt.event.ActionListener() {
@@ -150,98 +122,89 @@ public class Main extends javax.swing.JPanel implements Runnable {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(bThreadSleep, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tNewsInput, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(sThreadCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 779, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lThreadCounter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bCreateThreads, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(cSelectCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bCreateNews, javax.swing.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE))
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lNewsticker, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lCounter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                .addComponent(bThreadSleep, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(tNewsInput, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(sThreadCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 779, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(lThreadCounter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(bCreateThreads, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                .addComponent(cSelectCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(bCreateNews, javax.swing.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE))
+                                        .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lNewsticker, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lCounter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lNewsticker, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(bThreadSleep, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(tNewsInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cSelectCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bCreateNews))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sThreadCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(bCreateThreads, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                        .addComponent(lThreadCounter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lNewsticker, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(bThreadSleep, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(tNewsInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(cSelectCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(bCreateNews))
+                                .addGap(18, 18, 18)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(sThreadCounter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(bCreateThreads, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                                                .addComponent(lThreadCounter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addContainerGap())
         );
-        lThreadCounter.setText(""+sThreadCounter.getValue());
+        lThreadCounter.setText("" + sThreadCounter.getValue());
     }// </editor-fold>//GEN-END:initComponents
 
     private void bThreadSleep(ActionEvent evt) {
         if(sleepyThreads){
             threadHandler.wakeTheThreadsUpPlz();
             bThreadSleep.setText("Threads pausieren");
-            sleepyThreads = false;
         }else {
             threadHandler.sleepTheThreadsPlz();
             bThreadSleep.setText("Threads aufwecken");
-            sleepyThreads = true;
         }
     }
 
+
     private void bCreateNewsActionPerformed(ActionEvent evt) {
-        newsQueue.addNews(cSelectCategory.getItemAt(cSelectCategory.getSelectedIndex()),tNewsInput.getText());
+        newsQueue.addNews(cSelectCategory.getItemAt(cSelectCategory.getSelectedIndex()), tNewsInput.getText());
         System.out.println("New News: " + cSelectCategory.getItemAt(cSelectCategory.getSelectedIndex()) + "," + tNewsInput.getText());
     }
 
     private void bCreateThreadActionPerformed(ActionEvent evt) {
-        threadHandler = new ThreadHandler(sThreadCounter.getValue(),newsQueue);
+        threadHandler = new ThreadHandler(sThreadCounter.getValue(), newsQueue, this);
     }
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {
-        lThreadCounter.setText(""+ sThreadCounter.getValue());
+        lThreadCounter.setText("" + sThreadCounter.getValue());
     }
 
+    public void setNews(String news) {
+        lNewsticker.setText(news);
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bCreateThreads;
-    private javax.swing.JButton bCreateNews;
-    private javax.swing.JButton bThreadSleep;
-    private javax.swing.JComboBox<String> cSelectCategory;
-    private javax.swing.JLabel lNewsticker;
-    private javax.swing.JLabel lCounter;
-    private javax.swing.JLabel lThreadCounter;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSlider sThreadCounter;
-    private javax.swing.JTextField tNewsInput;
-
-    // End of variables declaration//GEN-END:variables
+    public void setNewsCounter(String counterText) {
+        lCounter.setText(counterText);
+    }
 }
