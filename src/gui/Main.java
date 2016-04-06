@@ -5,6 +5,9 @@ import backend.ThreadHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.NoSuchElementException;
 
 import static util.NewsCategory.*;
@@ -15,10 +18,9 @@ import static util.NewsCategory.*;
 public class Main extends javax.swing.JPanel{
 
 
+    private Main instance;
     private static JFrame parent;
     private boolean sleepyThreads = false;
-    private Thread t;
-    private String threadName;
     private ThreadHandler threadHandler;
     private NewsQueue newsQueue;
     private javax.swing.JButton bCreateThreads;
@@ -39,6 +41,16 @@ public class Main extends javax.swing.JPanel{
         initParent();
         newsQueue = new NewsQueue();
         initComponents();
+        parent.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                if(threadHandler != null){
+                    threadHandler.stopThreads();
+                    System.out.println("Threads gestoppt");
+                }
+                parent.dispose();
+            }
+        });
+        instance = this;
     }
 
     public static void main(String[] Args) {
@@ -177,12 +189,16 @@ public class Main extends javax.swing.JPanel{
     }// </editor-fold>//GEN-END:initComponents
 
     private void bThreadSleep(ActionEvent evt) {
-        if(sleepyThreads){
-            threadHandler.wakeTheThreadsUpPlz();
-            bThreadSleep.setText("Threads pausieren");
-        }else {
-            threadHandler.sleepTheThreadsPlz();
-            bThreadSleep.setText("Threads aufwecken");
+        if(threadHandler != null){
+            if(sleepyThreads){
+                threadHandler.wakeTheThreadsUpPlz();
+                bThreadSleep.setText("Threads pausieren");
+                sleepyThreads = false;
+            }else {
+                threadHandler.sleepTheThreadsPlz();
+                bThreadSleep.setText("Threads aufwecken");
+                sleepyThreads = true;
+            }
         }
     }
 
@@ -193,7 +209,16 @@ public class Main extends javax.swing.JPanel{
     }
 
     private void bCreateThreadActionPerformed(ActionEvent evt) {
-        threadHandler = new ThreadHandler(sThreadCounter.getValue(), newsQueue, this);
+        ActionListener taskPerformer = new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                threadHandler = new ThreadHandler(instance.sThreadCounter.getValue(), instance.newsQueue, instance);
+                System.out.println("Hello!");
+
+            }
+        };
+        javax.swing.Timer t = new javax.swing.Timer(1000, taskPerformer);
+        t.setRepeats(false);
+        t.start();
     }
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {

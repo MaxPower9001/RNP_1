@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 public class NewsGrabber extends Thread{
     private Main parent;
     private NewsQueue newsQueue;
+    private boolean running = true;
 
     public NewsGrabber(Main parent, NewsQueue newsQueue) {
         this.newsQueue = newsQueue;
@@ -19,7 +20,7 @@ public class NewsGrabber extends Thread{
 
     @Override
     public void run() {
-        while (true) {
+        while (running) {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
@@ -34,5 +35,9 @@ public class NewsGrabber extends Thread{
                 // Wir wissen was wir tun.
             }
         }
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class ThreadHandler{
     ArrayList<NewsThread> newsThreads;
-    Thread newsGrabber;
+    NewsGrabber newsGrabber;
 
 
     public ThreadHandler(int threadCounter, NewsQueue newsQueue, Main parent) {
@@ -24,14 +24,28 @@ public class ThreadHandler{
     }
 
     public void sleepTheThreadsPlz(){
-        for (NewsThread nt : newsThreads){
-            nt.setPaused(true);
+        if(!newsThreads.isEmpty()){
+            for (NewsThread nt : newsThreads){
+                nt.setRunning(false);
+            }
         }
     }
 
     public void wakeTheThreadsUpPlz() {
-        for (NewsThread nt : newsThreads){
-            nt.setPaused(false);
+        if(!newsThreads.isEmpty()){
+            for (NewsThread nt : newsThreads){
+                nt.setRunning(true);
+                nt.run();
+            }
+        }
+    }
+    public void stopThreads() {
+        if(!newsThreads.isEmpty()){
+            wakeTheThreadsUpPlz();
+            newsGrabber.setRunning(false);
+            for(NewsThread nt : newsThreads){
+                nt.setRunning(false);
+            }
         }
     }
 }

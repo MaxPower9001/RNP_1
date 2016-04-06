@@ -10,8 +10,10 @@ import java.util.Random;
  */
 public class NewsThread extends Thread {
 
-    private boolean cancelled = false;
+    private boolean running = true;
     private boolean paused = false;
+    private boolean printPauseInfo = true;
+
 
     private Integer number;
 
@@ -32,7 +34,19 @@ public class NewsThread extends Thread {
     }
     @Override
     public void run() {
-        while(!cancelled && !paused){
+        while(running){
+//            while(paused){
+//                if(printPauseInfo){
+//                    System.out.println("Thread " + number + " pausiert.");
+//                    printPauseInfo = false;
+//                }
+//                try{
+//                    sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            printPauseInfo = true;
             try{
                 sleep((rngesus.nextInt(5)+1)*1000);
             } catch (InterruptedException e){
@@ -47,5 +61,9 @@ public class NewsThread extends Thread {
 
     public void setPaused(boolean paused) {
         this.paused = paused;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 }
